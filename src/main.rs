@@ -86,9 +86,9 @@ fn day_three() -> usize {
     gamma * epsilon
 }
 
-fn count_ones(input: &Vec<&str>) -> usize {
-    input.into_iter().fold(0usize, |n, line| {
-        if line.chars().nth(0) == Some('1') {
+fn count_ones(input: &[&str], index: usize) -> usize {
+    input.iter().fold(0usize, |n, line| {
+        if line.chars().nth(index) == Some('1') {
             n + 1
         } else {
             n
@@ -97,17 +97,31 @@ fn count_ones(input: &Vec<&str>) -> usize {
 }
 
 fn day_three_b() -> usize {
-    let input = include_str!("../inputs/day3.txt")
+    let mut input = include_str!("../inputs/day3_ex.txt")
         .lines()
         .collect::<Vec<&str>>();
-    let count = input.len();
-    let width = &input[0].len();
+    let width = input[0].len();
 
-    let ones = count_ones(&input);
-
-    input.into_iter().filter(|&line| {
-        
-    })
+    println!("{:?}", input);
+    for i in 0..width {
+        let ones = count_ones(&input, i);
+        let count = input.len();
+        input = input
+            .into_iter()
+            .filter(|&line| {
+                if ones >= count / 2 {
+                    line.chars().nth(i) == Some('1')
+                } else {
+                    line.chars().nth(i) == Some('0')
+                }
+            })
+            .collect();
+        println!("{:?}", input);
+        if input.len() == 1 {
+            break;
+        }
+    }
+    println!("{:?}", input);
 
     0
 }
