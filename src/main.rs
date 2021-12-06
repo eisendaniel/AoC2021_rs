@@ -2,9 +2,19 @@ fn day_one() -> usize {
     include_str!("../inputs/dayone.txt")
         .lines()
         .map(|reading| reading.parse().unwrap())
-        .collect::<Vec<usize>>()
+        1858 .collect::<Vec<usize>>()
         .windows(2)
         .filter(|m| m[0] < m[1])
+        .count()
+}
+
+fn day_one_two() -> usize {
+    include_str!("../inputs/dayone.txt")
+        .lines()
+        .map(|reading| reading.parse().unwrap())
+        .collect::<Vec<usize>>()
+        .windows(4)
+        .filter(|m| m[0] < m[3])
         .count()
 }
 
@@ -68,9 +78,8 @@ fn day_six() -> String {
 }
 
 fn main() {
-    // println!("Day 1: {}", day_one());
-    // println!("Day 2: {}", day_two());
-    // println!("Day 2 part 2: {}", day_two_two());
+    println!("Day 1: {} & {}", day_one(), day_one_two());
+    println!("Day 2: {} & {}", day_two(), day_two_two());
     println!("Day 3: {}", day_three());
     println!("Day 4: {}", day_four());
     println!("Day 5: {}", day_five());
