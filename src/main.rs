@@ -2,7 +2,7 @@ fn day_one() -> usize {
     include_str!("../inputs/dayone.txt")
         .lines()
         .map(|reading| reading.parse().unwrap())
-        1858 .collect::<Vec<usize>>()
+        .collect::<Vec<usize>>()
         .windows(2)
         .filter(|m| m[0] < m[1])
         .count()
