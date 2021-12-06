@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 fn day_one() -> usize {
     include_str!("../inputs/dayone.txt")
         .lines()
@@ -62,12 +64,13 @@ fn day_two_b() -> i32 {
 }
 
 fn day_three() -> usize {
-    const WIDTH: u32 = 12;
-    const COUNT: u32 = 1000;
+    let input = include_str!("../inputs/day3.txt");
+    let count = input.lines().count();
+    let width = input.lines().last().unwrap().chars().count();
 
-    let gamma = include_str!("../inputs/day3.txt")
+    let gamma_str = input
         .lines()
-        .fold(vec![0u32; WIDTH as usize], |counts, line| {
+        .fold(vec![0u32; width as usize], |counts, line| {
             line.chars()
                 .map(|c| c.to_digit(10).unwrap())
                 .zip(counts.into_iter())
@@ -75,37 +78,55 @@ fn day_three() -> usize {
                 .collect()
         })
         .into_iter()
-        .map(|count| (if count > COUNT / 2 { '1' } else { '0' }))
+        .map(|ones| (if ones > (count as u32 / 2) { '1' } else { '0' }))
         .collect::<String>();
 
-    let gamma = usize::from_str_radix(&gamma, 2).unwrap();
-    let epsilon = !gamma & ((1 << WIDTH) - 1);
-    // println!(
-    //     "gamma: {:12b}, epsilon: {:12b}, power: {}",
-    //     gamma,
-    //     epsilon,
-    //     gamma * epsilon
-    // );
+    let gamma = usize::from_str_radix(&gamma_str, 2).unwrap();
+    let epsilon = !gamma & ((1 << width) - 1);
     gamma * epsilon
+}
+
+fn count_ones(input: &Vec<&str>) -> usize {
+    input.into_iter().fold(0usize, |n, line| {
+        if line.chars().nth(0) == Some('1') {
+            n + 1
+        } else {
+            n
+        }
+    })
+}
+
+fn day_three_b() -> usize {
+    let input = include_str!("../inputs/day3.txt")
+        .lines()
+        .collect::<Vec<&str>>();
+    let count = input.len();
+    let width = &input[0].len();
+
+    let ones = count_ones(&input);
+
+    input.into_iter().filter(|&line| {
+        
+    })
+
+    0
 }
 
 fn day_four() -> String {
     String::from("TODO")
 }
 
-fn day_five() -> String {
-    String::from("TODO")
-}
-
-fn day_six() -> String {
+fn day_four_b() -> String {
     String::from("TODO")
 }
 
 fn main() {
-    println!("Day 1: {} & {}", day_one(), day_one_b());
-    println!("Day 2: {} & {}", day_two(), day_two_b());
-    println!("Day 3: {}", day_three());
-    println!("Day 4: {}", day_four());
-    println!("Day 5: {}", day_five());
-    println!("Day 6: {}", day_six());
+    let now = Instant::now();
+
+    // println!("Day 1: {} & {}", day_one(), day_one_b());
+    // println!("Day 2: {} & {}", day_two(), day_two_b());
+    println!("Day 3: {} & {}, ", day_three(), day_three_b());
+    // println!("Day 4: {}", day_four(), day_four_b());
+
+    println!("finished in {} µs", now.elapsed().as_micros());
 }
