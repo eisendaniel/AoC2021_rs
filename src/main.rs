@@ -61,8 +61,32 @@ fn day_two_b() -> i32 {
     depth * h_pos
 }
 
-fn day_three() -> String {
-    String::from("TODO")
+fn day_three() -> usize {
+    const WIDTH: u32 = 12;
+    const COUNT: u32 = 1000;
+
+    let gamma = include_str!("../inputs/day3.txt")
+        .lines()
+        .fold(vec![0u32; WIDTH as usize], |counts, line| {
+            line.chars()
+                .map(|c| c.to_digit(10).unwrap())
+                .zip(counts.into_iter())
+                .map(|(a, b)| a + b)
+                .collect()
+        })
+        .into_iter()
+        .map(|count| (if count > COUNT / 2 { '1' } else { '0' }))
+        .collect::<String>();
+
+    let gamma = usize::from_str_radix(&gamma, 2).unwrap();
+    let epsilon = !gamma & ((1 << WIDTH) - 1);
+    // println!(
+    //     "gamma: {:12b}, epsilon: {:12b}, power: {}",
+    //     gamma,
+    //     epsilon,
+    //     gamma * epsilon
+    // );
+    gamma * epsilon
 }
 
 fn day_four() -> String {
