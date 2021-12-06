@@ -8,7 +8,7 @@ fn day_one() -> usize {
         .count()
 }
 
-fn day_one_two() -> usize {
+fn day_one_b() -> usize {
     include_str!("../inputs/dayone.txt")
         .lines()
         .map(|reading| reading.parse().unwrap())
@@ -37,7 +37,7 @@ fn day_two() -> u32 {
     depth * h_pos
 }
 
-fn day_two_two() -> i32 {
+fn day_two_b() -> i32 {
     let input: Vec<&str> = include_str!("../inputs/daytwo.txt").lines().collect();
 
     let mut aim = 0;
@@ -78,8 +78,8 @@ fn day_six() -> String {
 }
 
 fn main() {
-    println!("Day 1: {} & {}", day_one(), day_one_two());
-    println!("Day 2: {} & {}", day_two(), day_two_two());
+    println!("Day 1: {} & {}", day_one(), day_one_b());
+    println!("Day 2: {} & {}", day_two(), day_two_b());
     println!("Day 3: {}", day_three());
     println!("Day 4: {}", day_four());
     println!("Day 5: {}", day_five());
