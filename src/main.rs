@@ -1,4 +1,7 @@
-use std::time::Instant;
+use std::{panic, time::Instant};
+
+mod lib;
+use lib::count_bits;
 
 fn day_one() -> usize {
     include_str!("../inputs/dayone.txt")
@@ -86,44 +89,45 @@ fn day_three() -> usize {
     gamma * epsilon
 }
 
-fn count_ones(input: &[&str], index: usize) -> usize {
-    input.iter().fold(0usize, |n, line| {
-        if line.chars().nth(index) == Some('1') {
-            n + 1
-        } else {
-            n
-        }
-    })
-}
-
 fn day_three_b() -> usize {
-    let mut input = include_str!("../inputs/day3_ex.txt")
+    let mut o2_gen = include_str!("../inputs/day3.txt")
         .lines()
         .collect::<Vec<&str>>();
-    let width = input[0].len();
+    let mut co2_scrub = o2_gen.clone();
 
-    println!("{:?}", input);
+    let width = o2_gen[0].len();
     for i in 0..width {
-        let ones = count_ones(&input, i);
-        let count = input.len();
-        input = input
-            .into_iter()
-            .filter(|&line| {
-                if ones >= count / 2 {
-                    line.chars().nth(i) == Some('1')
-                } else {
-                    line.chars().nth(i) == Some('0')
-                }
-            })
-            .collect();
-        println!("{:?}", input);
-        if input.len() == 1 {
-            break;
+        let o2_crit = count_bits(&o2_gen, i);
+        let co2_crit = count_bits(&co2_scrub, i);
+
+        let (o2_count, co2_count) = (o2_gen.len(), co2_scrub.len());
+        if o2_count > 1 {
+            o2_gen = o2_gen
+                .into_iter()
+                .filter(|&line| match o2_crit {
+                    1 | 0 => line.chars().nth(i) == Some('1'), //more ones or equal -> keep ones
+                    -1 => line.chars().nth(i) == Some('0'),    //more zeros -> keep zeros
+                    _ => panic!("Oops"),
+                })
+                .collect();
+        }
+        if co2_count > 1 {
+            co2_scrub = co2_scrub
+                .into_iter()
+                .filter(|&line| {
+                    match co2_crit {
+                        1 | 0 => line.chars().nth(i) == Some('0'), //more ones or equal -> keep zeros
+                        -1 => line.chars().nth(i) == Some('1'),    //more zeros -> keep ones
+                        _ => panic!("Oops"),
+                    }
+                })
+                .collect();
         }
     }
-    println!("{:?}", input);
+    let o2_gen = usize::from_str_radix(o2_gen[0], 2).unwrap();
+    let co2_scrub = usize::from_str_radix(co2_scrub[0], 2).unwrap();
 
-    0
+    o2_gen * co2_scrub
 }
 
 fn day_four() -> String {
@@ -137,10 +141,14 @@ fn day_four_b() -> String {
 fn main() {
     let now = Instant::now();
 
-    // println!("Day 1: {} & {}", day_one(), day_one_b());
-    // println!("Day 2: {} & {}", day_two(), day_two_b());
-    println!("Day 3: {} & {}, ", day_three(), day_three_b());
-    // println!("Day 4: {}", day_four(), day_four_b());
+    match std::env::args().nth(1).expect("please specify day to run, i.e. day one -> \"--1\"").as_str() {
+        "--1" => println!("Day 1: a->{} & b->{}", day_one(), day_one_b()),
+        "--2" => println!("Day 2: a->{} & b->{}", day_two(), day_two_b()),
+        "--3" => println!("Day 3: a->{} & b->{}, ", day_three(), day_three_b()),
+        "--4" => println!("Day 4: a->{} & b->{}", day_four(), day_four_b()),
+        
+        _ => eprintln!("please specify day to run, i.e. day one -> \"--1\"")
+    };
 
     println!("finished in {} µs", now.elapsed().as_micros());
 }
