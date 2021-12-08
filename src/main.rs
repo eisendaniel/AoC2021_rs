@@ -1,4 +1,4 @@
-use std::{panic, time::Instant};
+use std::{env::args, panic, time::Instant};
 
 mod lib;
 use lib::count_bits;
@@ -139,15 +139,18 @@ fn day_four_b() -> String {
 }
 
 fn main() {
+    let day = args()
+        .nth(1)
+        .expect("please specify day to run, i.e. day one -> \"--1\"");
     let now = Instant::now();
 
-    match std::env::args().nth(1).expect("please specify day to run, i.e. day one -> \"--1\"").as_str() {
+    match day.as_str() {
         "--1" => println!("Day 1: a->{} & b->{}", day_one(), day_one_b()),
         "--2" => println!("Day 2: a->{} & b->{}", day_two(), day_two_b()),
         "--3" => println!("Day 3: a->{} & b->{}, ", day_three(), day_three_b()),
         "--4" => println!("Day 4: a->{} & b->{}", day_four(), day_four_b()),
-        
-        _ => eprintln!("please specify day to run, i.e. day one -> \"--1\"")
+
+        _ => eprintln!("please specify day to run, i.e. day one -> \"--1\""),
     };
 
     println!("finished in {} µs", now.elapsed().as_micros());

@@ -16,3 +16,9 @@ pub fn count_bits(input: &[&str], index: usize) -> isize {
         -1
     }
 }
+
+pub struct BingoNumber {
+    value: u32,
+    mark: bool
+}
+
